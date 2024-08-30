@@ -1,0 +1,127 @@
+
+*{
+    background-color: rgb(41, 41, 73);
+}
+#secondary1{
+    display: none;
+}
+#secondary2{
+    display: none;
+}
+#secondary3{
+    display: none;
+}
+#secondary4{
+    display: none;
+}
+
+h1{
+    color: white;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+img{
+    right: initial;
+    position: relative;
+}
+
+/* General Footer Styling */
+footer {
+    bottom: 0%;
+    position: relative;
+    background-color: #333; /* Dark background for footer */
+    color: white; /* White text for contrast */
+    padding: 20px 0; /* Padding around the footer */
+}
+
+footer .row {
+    display: flex; /* Flexbox for columns */
+    justify-content: space-between; /* Space between columns */
+    flex-wrap: wrap; /* Wrap columns on smaller screens */
+    max-width: 1200px; /* Limit the width of the footer */
+    margin: 0 auto; /* Center the footer */
+}
+
+footer .col {
+    flex: 1; /* Each column takes equal space */
+    margin: 10px; /* Margin between columns */
+    min-width: 200px; /* Minimum width for each column */
+}
+
+footer .col h3 {
+    margin-bottom: 15px; /* Space below headings */
+    font-size: 18px; /* Font size for headings */
+    color: #ffd700; /* Gold color for headings */
+}
+
+footer .col p, footer .col ul, footer .col form {
+    font-size: 14px; /* Font size for text */
+    line-height: 1.6; /* Line height for readability */
+    color: #ccc; /* Light gray color for text */
+}
+
+footer .col ul {
+    list-style: none; /* Remove bullet points */
+    padding: 0; /* Remove padding */
+}
+
+footer .col ul li {
+    margin-bottom: 10px; /* Space between list items */
+}
+
+footer .col ul li a {
+    color: #ffd700; /* Gold color for links */
+    text-decoration: none; /* Remove underline from links */
+}
+
+footer .col ul li a:hover {
+    text-decoration: underline; /* Underline links on hover */
+}
+
+footer .col .social-icons i {
+    margin: 10px 5px; /* Margin around social icons */
+    font-size: 18px; /* Font size for icons */
+    color: #ffd700; /* Gold color for icons */
+    cursor: pointer; /* Pointer cursor on hover */
+}
+
+footer .col .social-icons i:hover {
+    color: #fff; /* White color on hover */
+}
+
+footer .col form input[type="email"] {
+    padding: 8px; /* Padding inside input field */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Rounded corners */
+    margin-right: 10px; /* Space between input and button */
+}
+
+footer .col form button {
+    background-color: #ffd700; /* Gold background for button */
+    border: none; /* Remove border */
+    padding: 8px 15px; /* Padding inside button */
+    color: #333; /* Dark text color */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+}
+
+footer .col form button:hover {
+    background-color: #fff; /* White background on hover */
+    color: #333; /* Dark text color on hover */
+}
+
+footer .col .logo {
+    margin-bottom: 15px; /* Space below logo */
+    border-radius: 50%; /* Circular logo */
+}
+
+footer hr {
+    border-top: 1px solid #ccc; /* Light gray border */
+    margin: 20px 0; /* Space around the horizontal rule */
+}
+
+.foo {
+    text-align: center; /* Center the copyright text */
+    color: #ccc; /* Light gray text color */
+    font-size: 14px; /* Smaller font size */
+    margin-top: 10px; /* Space above the copyright text */
+}
