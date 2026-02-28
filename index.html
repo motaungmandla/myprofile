@@ -25,7 +25,7 @@
     }
     
     .container {
-      max-width: 500px;
+      max-width: 600px;
       width: 100%;
       text-align: center;
       background: white;
@@ -67,6 +67,7 @@
     .download-btn {
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 10px;
       background: #E30613;
       color: white;
@@ -80,8 +81,8 @@
       cursor: pointer;
       box-shadow: 0 4px 14px rgba(227, 6, 19, 0.3);
       width: 100%;
-      justify-content: center;
       margin-bottom: 24px;
+      position: relative;
     }
     
     .download-btn:hover {
@@ -92,6 +93,14 @@
     
     .download-btn:active {
       transform: translateY(0);
+    }
+    
+    .download-btn .btn-text {
+      transition: all 0.2s ease;
+    }
+    
+    .download-btn.loading .btn-text {
+      opacity: 0.7;
     }
     
     .repo-link {
@@ -187,6 +196,313 @@
       color: #999;
       font-size: 0.85rem;
     }
+
+    /* Loader Showcase */
+    .loaders-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin: 30px 0 15px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid rgba(227, 6, 19, 0.2);
+    }
+
+    .loaders-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin: 20px 0 30px;
+    }
+
+    .loader-card {
+      background: #fff9f9;
+      border-radius: 16px;
+      padding: 25px 15px;
+      border: 1px solid rgba(227, 6, 19, 0.1);
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .loader-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(227, 6, 19, 0.15);
+      border-color: #E30613;
+    }
+
+    .loader-label {
+      font-size: 0.8rem;
+      color: #888;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+
+    /* Loader 1 - Pulse Rings */
+    .loader-1 {
+      width: 40px;
+      height: 40px;
+      position: relative;
+    }
+    
+    .loader-1:before,
+    .loader-1:after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background-color: #E30613;
+      opacity: 0.6;
+      animation: pulse-ring 2s infinite ease-in-out;
+    }
+    
+    .loader-1:after {
+      animation-delay: -1s;
+    }
+    
+    @keyframes pulse-ring {
+      0%, 100% {
+        transform: scale(0);
+        opacity: 0.6;
+      }
+      50% {
+        transform: scale(1);
+        opacity: 0;
+      }
+    }
+
+    /* Loader 2 - Rotating Square */
+    .loader-2 {
+      width: 40px;
+      height: 40px;
+      background-color: #E30613;
+      animation: rotate-square 1.2s infinite ease-in-out;
+    }
+    
+    @keyframes rotate-square {
+      0% {
+        transform: perspective(120px) rotateX(0deg) rotateY(0deg);
+      }
+      50% {
+        transform: perspective(120px) rotateX(-180deg) rotateY(0deg);
+      }
+      100% {
+        transform: perspective(120px) rotateX(-180deg) rotateY(-180deg);
+      }
+    }
+
+    /* Loader 3 - Dots Wave */
+    .loader-3 {
+      display: flex;
+      gap: 6px;
+    }
+    
+    .loader-3 div {
+      width: 8px;
+      height: 8px;
+      background-color: #E30613;
+      border-radius: 50%;
+      animation: wave 1.4s infinite ease-in-out both;
+    }
+    
+    .loader-3 div:nth-child(1) {
+      animation-delay: -0.32s;
+    }
+    
+    .loader-3 div:nth-child(2) {
+      animation-delay: -0.16s;
+    }
+    
+    @keyframes wave {
+      0%, 80%, 100% {
+        transform: scale(0.6);
+        opacity: 0.4;
+      }
+      40% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    /* Loader 4 - Bouncing Bars */
+    .loader-4 {
+      display: flex;
+      gap: 4px;
+      height: 30px;
+      align-items: center;
+    }
+    
+    .loader-4 div {
+      width: 6px;
+      height: 100%;
+      background-color: #E30613;
+      animation: bars 1.2s infinite ease-in-out;
+    }
+    
+    .loader-4 div:nth-child(2) {
+      animation-delay: -1.0s;
+    }
+    
+    .loader-4 div:nth-child(3) {
+      animation-delay: -0.8s;
+    }
+    
+    .loader-4 div:nth-child(4) {
+      animation-delay: -0.6s;
+    }
+    
+    .loader-4 div:nth-child(5) {
+      animation-delay: -0.4s;
+    }
+    
+    @keyframes bars {
+      0%, 40%, 100% { 
+        transform: scaleY(0.4);
+      }  
+      20% { 
+        transform: scaleY(1.0);
+      }
+    }
+
+    /* Loader 5 - Heart Beat */
+    .loader-5 {
+      width: 40px;
+      height: 40px;
+      background-color: #E30613;
+      animation: heartbeat 1.2s infinite ease-in-out;
+    }
+    
+    @keyframes heartbeat {
+      0% { transform: scale(0.8); opacity: 0.7; }
+      25% { transform: scale(1.2); opacity: 1; }
+      50% { transform: scale(0.8); opacity: 0.7; }
+      75% { transform: scale(1.1); opacity: 0.9; }
+      100% { transform: scale(0.8); opacity: 0.7; }
+    }
+
+    /* Loader 6 - Spinning Circle */
+    .loader-6 {
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba(227, 6, 19, 0.2);
+      border-top: 4px solid #E30613;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Loader 7 - Infinity Loop */
+    .loader-7 {
+      width: 50px;
+      height: 30px;
+      position: relative;
+    }
+    
+    .loader-7:before,
+    .loader-7:after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border: 3px solid #E30613;
+      border-radius: 50%;
+      animation: infinity 2s infinite ease-in-out;
+    }
+    
+    .loader-7:before {
+      left: 0;
+    }
+    
+    .loader-7:after {
+      right: 0;
+      animation-delay: -1s;
+    }
+    
+    @keyframes infinity {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(0.5); opacity: 0.3; }
+    }
+
+    /* Loader 8 - Clock Loader */
+    .loader-8 {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(227, 6, 19, 0.2);
+      border-radius: 50%;
+      position: relative;
+      animation: clock-shadow 2s infinite linear;
+    }
+    
+    .loader-8:before {
+      content: '';
+      position: absolute;
+      width: 3px;
+      height: 18px;
+      background-color: #E30613;
+      left: 50%;
+      top: 3px;
+      transform-origin: bottom center;
+      animation: clock-hand 2s infinite linear;
+    }
+    
+    @keyframes clock-hand {
+      0% { transform: translateX(-50%) rotate(0deg); }
+      100% { transform: translateX(-50%) rotate(360deg); }
+    }
+    
+    @keyframes clock-shadow {
+      0% { box-shadow: 0 0 0 0 rgba(227, 6, 19, 0.3); }
+      50% { box-shadow: 0 0 0 8px rgba(227, 6, 19, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(227, 6, 19, 0); }
+    }
+
+    /* Loader 9 - Morphing Diamond */
+    .loader-9 {
+      width: 40px;
+      height: 40px;
+      background-color: #E30613;
+      clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+      animation: morph 2s infinite ease-in-out;
+    }
+    
+    @keyframes morph {
+      0%, 100% {
+        clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+        transform: rotate(0deg) scale(1);
+      }
+      50% {
+        clip-path: polygon(20% 0%, 80% 0%, 100% 50%, 80% 100%, 20% 100%, 0% 50%);
+        transform: rotate(180deg) scale(1.2);
+        background-color: #c40510;
+      }
+    }
+
+    /* In-button loader */
+    .btn-loader {
+      display: none;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
+    }
+    
+    .download-btn.loading .btn-loader {
+      display: inline-block;
+    }
+    
+    @media (max-width: 600px) {
+      .loaders-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
     
     @media (max-width: 480px) {
       .container {
@@ -201,6 +517,10 @@
         padding: 14px 24px;
         font-size: 1rem;
       }
+      
+      .loaders-grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -211,18 +531,11 @@
     <h1>Alliance Demo App</h1>
     <p class="subtitle">A Flutter-powered demonstration of AI-enhanced insurance solutions, built for Alliance Insurance Lesotho</p>
     
-    <!-- Primary Download Button -->
-    <a href="https://github.com/motaungmandla/myprofile/raw/refs/heads/main/alliance.apk" 
-       class="download-btn" 
-       target="_blank" 
-       rel="noopener">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-        <polyline points="17 8 12 3 7 8"></polyline>
-        <line x1="12" y1="3" x2="12" y2="15"></line>
-      </svg>
-      Download Alliance.apk
-    </a>
+    <!-- Primary Download Button with Loader -->
+    <button id="downloadBtn" class="download-btn" onclick="handleDownload()">
+      <span class="btn-text">Download Demo.apk</span>
+      <span class="btn-loader"></span>
+    </button>
     
     <!-- GitHub Repo Link -->
     <a href="https://github.com/motaungmandla/myprofile" 
@@ -234,6 +547,76 @@
       </svg>
       View source on GitHub
     </a>
+    
+    <!-- Loaders Showcase Title -->
+    <div class="loaders-title">⚡ 9 Premium CSS Loaders</div>
+    
+    <!-- Loaders Grid - All 9 Loaders -->
+    <div class="loaders-grid">
+      <!-- Loader 1: Pulse Rings -->
+      <div class="loader-card">
+        <div class="loader-1"></div>
+        <span class="loader-label">Pulse Rings</span>
+      </div>
+      
+      <!-- Loader 2: 3D Square -->
+      <div class="loader-card">
+        <div class="loader-2"></div>
+        <span class="loader-label">3D Square</span>
+      </div>
+      
+      <!-- Loader 3: Dots Wave -->
+      <div class="loader-card">
+        <div class="loader-3">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+        <span class="loader-label">Dots Wave</span>
+      </div>
+      
+      <!-- Loader 4: Bouncing Bars -->
+      <div class="loader-card">
+        <div class="loader-4">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+        <span class="loader-label">Bouncing Bars</span>
+      </div>
+      
+      <!-- Loader 5: Heart Beat -->
+      <div class="loader-card">
+        <div class="loader-5"></div>
+        <span class="loader-label">Heart Beat</span>
+      </div>
+      
+      <!-- Loader 6: Spinning Circle -->
+      <div class="loader-card">
+        <div class="loader-6"></div>
+        <span class="loader-label">Spinner</span>
+      </div>
+      
+      <!-- Loader 7: Infinity Loop -->
+      <div class="loader-card">
+        <div class="loader-7"></div>
+        <span class="loader-label">Infinity</span>
+      </div>
+      
+      <!-- Loader 8: Clock Loader -->
+      <div class="loader-card">
+        <div class="loader-8"></div>
+        <span class="loader-label">Clock</span>
+      </div>
+      
+      <!-- Loader 9: Morphing Diamond -->
+      <div class="loader-card">
+        <div class="loader-9"></div>
+        <span class="loader-label">Morph</span>
+      </div>
+    </div>
     
     <!-- App Features -->
     <div class="features">
@@ -259,5 +642,28 @@
       © 2026 Motaung Mandla • Demo for Alliance Insurance Lesotho
     </div>
   </div>
+
+  <script>
+    function handleDownload() {
+      const btn = document.getElementById('downloadBtn');
+      
+      // Add loading state
+      btn.classList.add('loading');
+      
+      // Simulate download preparation (1.5 seconds)
+      setTimeout(() => {
+        // Create temporary anchor for download
+        const link = document.createElement('a');
+        //link.href = 'https://github.com/motaungmandla/myprofile/raw/refs/heads/main/minerals.apk';
+        link.href = 'https://github.com/motaungmandla/androidToApple/actions/runs/21490601666/artifacts/5308489532'
+        link.target = '_blank';
+        link.rel = 'noopener';
+        link.click();
+        
+        // Remove loading state
+        btn.classList.remove('loading');
+      }, 1500);
+    }
+  </script>
 </body>
 </html>
