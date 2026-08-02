@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Motaung Android Hub — Download Apps Built with AI</title>
+<meta name="description" content="Download Android apps crafted by Mandla Motaung. AI-powered, open-source, and built for everyone." />
+
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+<!-- Fontsource Inter -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.0.16/index.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/space-grotesk@5.0.16/index.min.css" />
+
+<style>
+  :root{
+    --crim:#dc2626;
+    --crim-2:#f87171;
+    --bg:#05050a;
+    --bg-2:#0b0b14;
+    --glass: rgba(255,255,255,0.04);
+    --glass-brd: rgba(255,255,255,0.08);
+  }
+  *{ -webkit-font-smoothing:antialiased; }
+  html,body{ background:var(--bg); color:#e7e7ee; font-family:'Inter',sans-serif; overflow-x:hidden; }
+  h1,h2,h3,.display{ font-family:'Space Grotesk',sans-serif; letter-spacing:-0.02em; }
+
+  /* Animated gradient background */
+  .bg-aurora{
+    position:fixed; inset:0; z-index:-2;
+    background:
+      radial-gradient(1200px 800px at 10% -10%, rgba(220,38,38,0.25), transparent 60%),
+      radial-gradient(900px 700px at 90% 10%, rgba(124,58,237,0.22), transparent 60%),
+      radial-gradient(800px 600px at 50% 110%, rgba(236,72,153,0.18), transparent 60%),
+      linear-gradient(180deg,#05050a 0%, #070710 100%);
+  }
+  .bg-grid{
+    position:fixed; inset:0; z-index:-1; pointer-events:none;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+  }
+
+  /* Floating orbs */
+  .orb{
+    position:absolute; border-radius:9999px; filter:blur(60px); opacity:0.55;
+    animation: floaty 14s ease-in-out infinite;
+  }
+  @keyframes floaty{
+    0%,100%{ transform: translate(0,0) scale(1); }
+    50%{ transform: translate(30px,-40px) scale(1.08); }
+  }
+
+  /* Navbar blur */
+  .nav-blur{ backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+
+  /* Gradient text */
+  .grad-text{
+    background: linear-gradient(120deg,#fff 0%, #fca5a5 40%, #dc2626 70%, #a78bfa 100%);
+    background-size: 200% 200%;
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    animation: gradShift 8s ease infinite;
+  }
+  @keyframes gradShift{
+    0%,100%{ background-position: 0% 50%; }
+    50%{ background-position: 100% 50%; }
+  }
+
+  /* Buttons */
+  .btn-primary{
+    position:relative; overflow:hidden;
+    background: linear-gradient(120deg,#dc2626,#ef4444);
+    transition: transform .25s ease, box-shadow .25s ease;
+    box-shadow: 0 10px 30px -10px rgba(220,38,38,0.6);
+  }
+  .btn-primary:hover{ transform: translateY(-2px); box-shadow: 0 20px 40px -10px rgba(220,38,38,0.8); }
+  .btn-primary::after{
+    content:""; position:absolute; inset:0;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.35), transparent);
+    transform: translateX(-120%); transition: transform .6s ease;
+  }
+  .btn-primary:hover::after{ transform: translateX(120%); }
+
+  .btn-ghost{
+    border:1px solid rgba(255,255,255,0.15);
+    transition: all .25s ease;
+  }
+  .btn-ghost:hover{ border-color: rgba(220,38,38,0.7); background: rgba(220,38,38,0.08); }
+
+  /* Cards */
+  .app-card{
+    position:relative;
+    background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+    border:1px solid var(--glass-brd);
+    border-radius:22px;
+    overflow:hidden;
+    transition: transform .4s cubic-bezier(.2,.8,.2,1), border-color .3s ease, box-shadow .4s ease;
+  }
+  .app-card::before{
+    content:""; position:absolute; inset:0;
+    background: radial-gradient(400px 200px at var(--mx,50%) var(--my,0%), rgba(220,38,38,0.25), transparent 60%);
+    opacity:0; transition: opacity .4s ease; pointer-events:none;
+  }
+  .app-card:hover{ transform: translateY(-6px); border-color: rgba(220,38,38,0.45); box-shadow: 0 30px 60px -30px rgba(220,38,38,0.4); }
+  .app-card:hover::before{ opacity:1; }
+
+  /* Reveal on scroll */
+  .reveal{ opacity:0; transform: translateY(24px); transition: opacity .8s ease, transform .8s cubic-bezier(.2,.8,.2,1); }
+  .reveal.in{ opacity:1; transform:none; }
+
+  /* Hero image float */
+  .hero-float{ animation: heroFloat 6s ease-in-out infinite; }
+  @keyframes heroFloat{
+    0%,100%{ transform: translateY(0) rotate(-2deg); }
+    50%{ transform: translateY(-14px) rotate(1deg); }
+  }
+
+  /* Marquee */
+  .marquee{ display:flex; gap:3rem; animation: scroll 30s linear infinite; }
+  @keyframes scroll{ from{ transform: translateX(0); } to{ transform: translateX(-50%); } }
+
+  /* Skill chips */
+  .chip{
+    border:1px solid var(--glass-brd);
+    background: rgba(255,255,255,0.03);
+    transition: all .25s ease;
+  }
+  .chip:hover{ border-color: rgba(220,38,38,0.6); background: rgba(220,38,38,0.08); transform: translateY(-2px); }
+
+  /* Footer */
+  footer{ background: linear-gradient(180deg, transparent, #05050a 40%); }
+  footer .footer{ padding: 60px 0 0; }
+  footer .container{ max-width:1200px; margin:0 auto; padding:0 24px; }
+  footer .row{ display:flex; flex-wrap:wrap; gap:32px; }
+  footer .col-md-4{ flex:1 1 280px; }
+  footer h3{ color:#fff; font-size:1.15rem; font-weight:700; margin-bottom:16px; font-family:'Space Grotesk',sans-serif; }
+  footer p{ color:#a1a1aa; font-size:0.95rem; line-height:1.6; }
+  footer a{ color:#a1a1aa; text-decoration:none; transition: color .2s ease; }
+  footer a:hover{ color:#fca5a5; }
+  footer .social_icon{ list-style:none; padding:0; margin:0; display:flex; gap:12px; }
+  footer .social_icon li a{
+    width:40px; height:40px; display:inline-flex; align-items:center; justify-content:center;
+    border-radius:50%; border:1px solid rgba(255,255,255,0.12);
+    color:#fff; transition: all .25s ease;
+  }
+  footer .social_icon li a:hover{ background:#dc2626; border-color:#dc2626; transform: translateY(-3px); }
+  footer .copyright{ border-top:1px solid rgba(255,255,255,0.08); margin-top:40px; padding:24px 0; }
+  footer .copyright p{ margin:0; font-size:0.88rem; }
+
+  /* Scroll indicator */
+  .scroll-indicator{ animation: bounce 2s ease-in-out infinite; }
+  @keyframes bounce{ 0%,100%{ transform: translateY(0); } 50%{ transform: translateY(8px); } }
+
+  /* Ticker */
+  .ticker-dot{ width:6px; height:6px; border-radius:9999px; background:#dc2626; box-shadow:0 0 12px #dc2626; }
+
+  /* Mobile menu */
+  .mobile-menu{ transform: translateY(-120%); transition: transform .35s cubic-bezier(.2,.8,.2,1); }
+  .mobile-menu.open{ transform: translateY(0); }
+
+  /* Pulse ring */
+  .pulse-ring::before{
+    content:""; position:absolute; inset:-4px; border-radius:9999px;
+    border:2px solid rgba(220,38,38,0.5);
+    animation: pulseRing 2s ease-out infinite;
+  }
+  @keyframes pulseRing{
+    0%{ transform: scale(0.9); opacity:1; }
+    100%{ transform: scale(1.4); opacity:0; }
+  }
+
+  /* Counter */
+  .counter{ font-variant-numeric: tabular-nums; }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar{ width:10px; height:10px; }
+  ::-webkit-scrollbar-track{ background:#05050a; }
+  ::-webkit-scrollbar-thumb{ background: linear-gradient(180deg,#7f1d1d,#dc2626); border-radius:10px; }
+</style>
+</head>
+<body>
+
+<div class="bg-aurora"></div>
+<div class="bg-grid"></div>
+
+<!-- NAVBAR -->
+<header id="navbar" class="fixed top-0 inset-x-0 z-50 nav-blur bg-black/30 border-b border-white/5">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
+    <a href="#home" class="flex items-center gap-2 group">
+      <span class="relative inline-flex">
+        <span class="pulse-ring absolute inset-0 rounded-full"></span>
+        <span class="relative w-9 h-9 rounded-full bg-gradient-to-br from-red-600 to-red-800 flex items-center justify-center text-white font-bold shadow-lg shadow-red-900/50">M</span>
+      </span>
+      <span class="font-semibold tracking-tight text-white">Motaung<span class="text-red-500">.</span>Hub</span>
+    </a>
+
+    <nav class="hidden md:flex items-center gap-8 text-sm text-white/80">
+      <a href="#apps" class="hover:text-white transition">Apps</a>
+      <a href="#about" class="hover:text-white transition">About</a>
+      <a href="#skills" class="hover:text-white transition">Skills</a>
+      <a href="#contact" class="hover:text-white transition">Contact</a>
+      <a href="https://github.com/motaungmandla/AndroidApps" target="_blank" class="btn-primary text-white text-sm px-4 py-2 rounded-full font-medium">
+        <i class="fa-brands fa-github mr-1"></i> GitHub
+      </a>
+    </nav>
+
+    <button id="menuBtn" class="md:hidden text-white p-2" aria-label="Menu">
+      <i class="fa-solid fa-bars text-xl"></i>
+    </button>
+  </div>
+
+  <div id="mobileMenu" class="mobile-menu md:hidden fixed top-16 inset-x-0 bg-black/80 nav-blur border-b border-white/10">
+    <div class="px-6 py-6 flex flex-col gap-4 text-white/90">
+      <a href="#apps" class="py-2 border-b border-white/5">Apps</a>
+      <a href="#about" class="py-2 border-b border-white/5">About</a>
+      <a href="#skills" class="py-2 border-b border-white/5">Skills</a>
+      <a href="#contact" class="py-2 border-b border-white/5">Contact</a>
+      <a href="https://github.com/motaungmandla/AndroidApps" target="_blank" class="btn-primary text-center text-white text-sm px-4 py-3 rounded-full font-medium mt-2">
+        <i class="fa-brands fa-github mr-1"></i> Open GitHub Repo
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section id="home" class="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden">
+  <div class="orb" style="width:380px;height:380px;background:#dc2626;top:-120px;left:-120px;"></div>
+  <div class="orb" style="width:320px;height:320px;background:#7c3aed;top:40%;right:-140px;animation-delay:-6s;"></div>
+  <div class="orb" style="width:260px;height:260px;background:#ec4899;bottom:-100px;left:30%;animation-delay:-3s;"></div>
+
+  <div class="max-w-7xl mx-auto px-5 sm:px-8 grid lg:grid-cols-12 gap-12 items-center relative">
+    <div class="lg:col-span-7 reveal">
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-white/5 text-xs text-white/70 mb-6">
+        <span class="ticker-dot"></span>
+        <span>New builds pushed weekly · Open-source APKs</span>
+      </div>
+
+      <h1 class="display text-4xl sm:text-5xl lg:text-7xl font-bold leading-[1.05]">
+        Download Android apps<br/>
+        <span class="grad-text">crafted with AI.</span>
+      </h1>
+
+      <p class="mt-6 text-white/70 text-lg max-w-xl leading-relaxed">
+        A curated hub of Android applications built by <span class="text-white font-medium">Mandla Motaung</span> — from AI-powered Sesotho speech recognition to contextual chatbots. Free, open-source, and ready to install.
+      </p>
+
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href="#apps" class="btn-primary text-white px-6 py-3.5 rounded-full font-medium inline-flex items-center gap-2">
+          <i class="fa-solid fa-download"></i> Browse & Download
+        </a>
+        <a href="https://github.com/motaungmandla/AndroidApps/actions/runs/30741243949/artifacts/8831386276" target="_blank" class="btn-ghost text-white px-6 py-3.5 rounded-full font-medium inline-flex items-center gap-2">
+          <i class="fa-solid fa-bolt"></i> Latest Build
+        </a>
+      </div>
+
+      <!-- Stats -->
+      <div class="mt-12 grid grid-cols-3 gap-4 max-w-lg">
+        <div>
+          <div class="counter text-3xl sm:text-4xl font-bold text-white" data-target="6">0</div>
+          <div class="text-xs text-white/50 mt-1">Published Apps</div>
+        </div>
+        <div>
+          <div class="counter text-3xl sm:text-4xl font-bold text-white" data-target="1200">0</div>
+          <div class="text-xs text-white/50 mt-1">+ Downloads</div>
+        </div>
+        <div>
+          <div class="counter text-3xl sm:text-4xl font-bold text-white" data-target="100">0</div>
+          <div class="text-xs text-white/50 mt-1">% Open Source</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lg:col-span-5 reveal relative">
+      <div class="relative hero-float">
+        <div class="absolute -inset-6 bg-gradient-to-br from-red-600/30 via-purple-600/20 to-pink-600/30 rounded-[40px] blur-2xl"></div>
+        <img src="https://image.qwenlm.ai/public_source/cdf769fd-9bdd-4197-b1bf-ea7c3f27a601/1176b00bb-62b0-4541-bbb0-5ee0ff287bb1.png"
+             alt="Android apps showcase"
+             class="relative rounded-3xl border border-white/10 shadow-2xl shadow-red-900/40 w-full" />
+      </div>
+
+      <!-- Floating badges -->
+      <div class="absolute -left-4 top-10 bg-black/60 nav-blur border border-white/10 rounded-2xl px-4 py-3 flex items-center gap-3 shadow-xl reveal">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-red-500 to-red-700 flex items-center justify-center">
+          <i class="fa-solid fa-microphone text-white"></i>
+        </div>
+        <div>
+          <div class="text-sm font-semibold text-white">Sesotho ASR</div>
+          <div class="text-xs text-white/50">AI Speech Recognition</div>
+        </div>
+      </div>
+
+      <div class="absolute -right-2 bottom-10 bg-black/60 nav-blur border border-white/10 rounded-2xl px-4 py-3 flex items-center gap-3 shadow-xl reveal">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-purple-700 flex items-center justify-center">
+          <i class="fa-solid fa-robot text-white"></i>
+        </div>
+        <div>
+          <div class="text-sm font-semibold text-white">AI Chatbot</div>
+          <div class="text-xs text-white/50">Contextual NLP</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll indicator -->
+  <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/40 text-xs scroll-indicator">
+    <span>Scroll</span>
+    <i class="fa-solid fa-chevron-down"></i>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<section class="py-6 border-y border-white/5 bg-black/30 overflow-hidden">
+  <div class="marquee whitespace-nowrap text-white/40 text-sm">
+    <span>★ Open Source</span><span>★ AI Powered</span><span>★ Android Native</span><span>★ Sesotho NLP</span><span>★ Machine Learning</span><span>★ Clean Architecture</span><span>★ Free to Download</span><span>★ Built in Lesotho</span>
+    <span>★ Open Source</span><span>★ AI Powered</span><span>★ Android Native</span><span>★ Sesotho NLP</span><span>★ Machine Learning</span><span>★ Clean Architecture</span><span>★ Free to Download</span><span>★ Built in Lesotho</span>
+  </div>
+</section>
+
+<!-- APPS -->
+<section id="apps" class="py-24 md:py-32 relative">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8">
+    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-14 reveal">
+      <div>
+        <div class="text-red-500 text-sm font-medium tracking-wider uppercase mb-2">Featured Collection</div>
+        <h2 class="display text-4xl sm:text-5xl font-bold text-white">Download the <span class="grad-text">latest APKs</span></h2>
+        <p class="text-white/60 mt-4 max-w-xl">Every app is built, tested, and shipped through GitHub Actions. Grab the latest release or dive into the source.</p>
+      </div>
+      <a href="https://github.com/motaungmandla/AndroidApps" target="_blank" class="btn-ghost text-white px-5 py-3 rounded-full inline-flex items-center gap-2 self-start">
+        <i class="fa-solid fa-folder-open"></i> View Repository
+      </a>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- App 1 -->
+      <article class="app-card p-6 reveal" style="--mx:50%;--my:0%">
+        <div class="flex items-start justify-between">
+          <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-red-500 to-red-700 flex items-center justify-center shadow-lg shadow-red-900/40">
+            <i class="fa-solid fa-microphone text-white text-xl"></i>
+          </div>
+          <span class="text-xs px-2.5 py-1 rounded-full bg-red-500/15 text-red-400 border border-red-500/30">AI / ML</span>
+        </div>
+        <h3 class="text-xl font-bold text-white mt-5">Sesotho ASR</h3>
+        <p class="text-white/60 text-sm mt-2 leading-relaxed">Automatic Speech Recognition for Sesotho. Trained on the SeSoDa dataset — an academic contribution to African language AI.</p>
+        <div class="mt-5 flex items-center gap-4 text-xs text-white/40">
+          <span><i class="fa-solid fa-code-branch mr-1"></i> v1.2.0</span>
+          <span><i class="fa-solid fa-weight-hanging mr-1"></i> 24 MB</span>
+          <span><i class="fa-brands fa-android mr-1"></i> Android 8+</span>
+        </div>
+        <div class="mt-6 flex gap-2">
+          <a href="https://github.com/motaungmandla/AndroidApps/actions/runs/30741243949/artifacts/8831386276" target="_blank" class="btn-primary text-white text-sm px-4 py-2.5 rounded-full flex-1 text-center inline-flex items-center justify-center gap-2">
+            <i class="fa-solid fa-download"></i> Download APK
+          </a>
+          <a href="https://github.com/motaungmandla/AndroidApps" target="_blank" class="btn-ghost text-white w-11 h-11 rounded-full flex items-center justify-center">
+            <i class="fa-brands fa-github"></i>
+          </a>
+        </div>
+      </article>
+
+      <!-- App 2 -->
+      <article class="app-card p-6 reveal" style="--mx:50%;--my:0%">
+        <div class="flex items-start justify-between">
+          <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500 to-purple-700 flex items-center justify-center shadow-lg shadow-purple-900/40">
+            <i class="fa-solid fa-comments text-white text-xl"></i>
+          </div>
+          <span class="text-xs px-2.5 py-1 rounded-full bg-purple-500/15 text-purple-400 border border-purple-500/30">NLP</span>
+        </div>
+        <h3 class="text-xl font-bold text-white mt-5">Algebraic Chatbot</h3>
+        <p class="text-white/60 text-sm mt-2 leading-relaxed">Contextual chatbot that solves algebra problems conversationally. Powered by fine-tuned language models.</p>
+        <div class="mt-5 flex items-center gap-4 text-xs text-white/40">
+          <span><i class="fa-solid fa-code-branch mr-1"></i> v2.0.1</span>
+          <span><i class="fa-solid fa-weight-hanging mr-1"></i> 18 MB</span>
+          <span><i class="fa-brands fa-android mr-1"></i> Android 8+</span>
+        </div>
+        <div class="mt-6 flex gap-2">
+          <a href="https://github.com/motaungmandla/AndroidApps/actions/runs/30741243949/artifacts/8831386276" target="_blank" class="btn-primary text-white text-sm px-4 py-2.5 rounded-full flex-1 text-center inline-flex items-center justify-center gap-2">
+            <i class="fa-solid fa-download"></i> Download APK
+          </a>
+          <a href="https://github.com/motaungmandla/AndroidApps" target="_blank" class="btn-ghost text-white w-11 h-11 rounded-full flex items-center justify-center">
+            <i class="fa-brands fa-github"></i>
+          </a>
+        </div>
+      </article>
+
+      <!-- App 3 -->
+      <article class="app-card p-6 reveal" style="--mx:50%;--my:0%">
+        <div class="flex items-start justify-between">
+          <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center shadow-lg shadow-amber-900/40">
+            <i class="fa-solid fa-dice text-white text-xl"></i>
+          </div>
+          <span class="text-xs px-2.5 py-1 rounded-full bg-amber-500/15 text-amber-400 border border-amber-500/30">Demo</span>
+        </div>
+        <h3 class="text-xl font-bold text-white mt-5">Lucky Bets</h3>
+        <p class="text-white/60 text-sm mt-2 leading-relaxed">Real-time state management showcase. Smooth UI, responsive animations, and clean architecture.</p>
+        <div class="mt-5 flex items-center gap-4 text-xs text-white/40">
+          <span><i class="fa-solid fa-code-branch mr-1"></i> v1.0.3</span>
+          <span><i class="fa-solid fa-weight-hanging mr-1"></i> 12 MB</span>
+          <span><i class="fa-brands fa-android mr-1"></i> Android 8+</span>
+        </div>
+        <div class="mt-6 flex gap-2">
+          <a href="https://github.com/motaungmandla/AndroidApps/actions/runs/30741243949/artifacts/8831386276" target="_blank" class="btn-primary text-white text-sm px-4 py-2.5 rounded-full flex-1 text-center inline-flex items-center justify-center gap-2">
+            <i class="fa-solid fa-download"></i> Download APK
+          </a>
+          <a href="https://github.com/motaungmandla/AndroidApps" target="_blank" class="btn-ghost text-white w-11 h-11 rounded-full flex items-center justify-center">
+            <i class="fa-brands fa-github"></i>
+          </a>
+        </div>
+      </article>
+
+      <!-- App 4 -->
+      <article class="app-card p-6 reveal" style="--mx:50%;--my:0%">
+        <div class="flex items-start justify-between">
+          <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-sky-500 to-sky-700 flex items-center justify-center shadow-lg shadow-sky-900/40">
+            <i class="fa-solid fa-coins text-white text-xl"></i>
+          </div>
+          <span class="text-xs px-2.5 py-1 rounded-full bg-sky-500/15 text-sky-400 border border-sky-500/30">Simulation</span>
+        </div>
+        <h3 class="text-xl font-bold text-white mt-5">Coin Toss</h3>
+        <p class="text-white/60 text-sm mt-2 leading-relaxed">Interactive probabilistic simulation with physics-based animations. Demonstrates clean architecture.</p>
+        <div class="mt-5 flex items-center gap-4 text-xs text-white/40">
+          <span><i class="fa-solid fa-code-branch mr-1"></i> v1.1.0</span>
+          <span><i class="fa-solid fa-weight-hanging mr-1"></i> 9 MB</span>
+          <span><i class="fa-brands fa-android mr-1"></i> Android 8+</span>
+        </div>
+        <div class="mt-6 flex gap-2">
+          <a href="https://github.com/motaungmandla/AndroidApps/actions/runs/30741243949/artifacts/8831386276" target="_blank" class="btn-primary text-white text-sm px-4 py-2.5 rounded-full flex-1 text-center inline-flex items-center justify-center gap-2">
+            <i class="fa-solid fa-download"></i> Download APK
+          </a>
+          <a href="https://github.com/motaungmandla/AndroidApps" target="_blank" class="btn-ghost text-white w-11 h-11 rounded-full flex items-center justify-center">
+            <i class="fa-brands fa-github"></i>
+          </a>
+        </div>
+      </article>
+
+      <!-- App 5 -->
+      <article class="app-card p-6 reveal" style="--mx:50%;--my:0%">
+        <div class="flex items-start justify-between">
+          <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center shadow-lg shadow-emerald-900/40">
+            <i class="fa-solid fa-horse text-white text-xl"></i>
+          </div>
+          <span class="text-xs px-2.5 py-1 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">Interactive</span>
+        </div>
+        <h3 class="text-xl font-bold text-white mt-5">Horse Racing</h3>
+        <p class="text-white/60 text-sm mt-2 leading-relaxed">Event-driven UI with real-time visual updates. A playground for animations and state sync.</p>
+        <div class="mt-5 flex items-center gap-4 text-xs text-white/40">
+          <span><i class="fa-solid fa-code-branch mr-1"></i> v1.0.0</span>
+          <span><i class="fa-solid fa-weight-hanging mr-1"></i> 14 MB</span>
+          <span><i class="fa-brands fa-android mr-1"></i> Android 8+</span>
+        </div>
+        <div class="mt-6 flex gap-2">
+          <a href="https://github.com/motaungmandla/AndroidApps/actions/runs/30741243949/artifacts/8831386276" target="_blank" class="btn-primary text-white text-sm px-4 py-2.5 rounded-full flex-1 text-center inline-flex items-center justify-center gap-2">
+            <i class="fa-solid fa-download"></i> Download APK
+          </a>
+          <a href="https://github.com/motaungmandla/AndroidApps" target="_blank" class="btn-ghost text-white w-11 h-11 rounded-full flex items-center justify-center">
+            <i class="fa-brands fa-github"></i>
+          </a>
+        </div>
+      </article>
+
+      <!-- App 6 -->
+      <article class="app-card p-6 reveal" style="--mx:50%;--my:0%">
+        <div class="flex items-start justify-between">
+          <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-pink-500 to-pink-700 flex items-center justify-center shadow-lg shadow-pink-900/40">
+            <i class="fa-solid fa-film text-white text-xl"></i>
+          </div>
+          <span class="text-xs px-2.5 py-1 rounded-full bg-pink-500/15 text-pink-400 border border-pink-500/30">API</span>
+        </div>
+        <h3 class="text-xl font-bold text-white mt-5">MovieTree</h3>
+        <p class="text-white/60 text-sm mt-2 leading-relaxed">TheMovieDB API integration. Proves REST API expertise with a beautiful movie discovery UI.</p>
+        <div class="mt-5 flex items-center gap-4 text-xs text-white/40">
+          <span><i class="fa-solid fa-code-branch mr-1"></i> v1.3.2</span>
+          <span><i class="fa-solid fa-weight-hanging mr-1"></i> 16 MB</span>
+          <span><i class="fa-brands fa-android mr-1"></i> Android 8+</span>
+        </div>
+        <div class="mt-6 flex gap-2">
+          <a href="https://github.com/motaungmandla/AndroidApps/actions/runs/30741243949/artifacts/8831386276" target="_blank" class="btn-primary text-white text-sm px-4 py-2.5 rounded-full flex-1 text-center inline-flex items-center justify-center gap-2">
+            <i class="fa-solid fa-download"></i> Download APK
+          </a>
+          <a href="https://github.com/motaungmandla/AndroidApps" target="_blank" class="btn-ghost text-white w-11 h-11 rounded-full flex items-center justify-center">
+            <i class="fa-brands fa-github"></i>
+          </a>
+        </div>
+      </article>
+    </div>
+
+    <div class="mt-12 text-center reveal">
+      <a href="https://github.com/motaungmandla/AndroidApps/actions" target="_blank" class="inline-flex items-center gap-2 text-white/70 hover:text-white transition">
+        <i class="fa-solid fa-gears"></i>
+        <span>View all builds on GitHub Actions</span>
+        <i class="fa-solid fa-arrow-right text-sm"></i>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="py-24 md:py-32 relative border-t border-white/5">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8 grid lg:grid-cols-12 gap-14 items-center">
+    <div class="lg:col-span-5 reveal">
+      <div class="relative">
+        <div class="absolute -inset-4 bg-gradient-to-br from-red-600/30 to-purple-600/20 rounded-[32px] blur-2xl"></div>
+        <div class="relative aspect-[4/5] rounded-3xl overflow-hidden border border-white/10 bg-gradient-to-br from-red-900/40 via-black to-purple-900/40">
+          <div class="absolute inset-0 flex flex-col items-center justify-center p-8 text-center">
+            <div class="w-28 h-28 rounded-full bg-gradient-to-br from-red-500 to-red-800 flex items-center justify-center text-5xl font-bold text-white shadow-2xl shadow-red-900/60 mb-6">
+              MM
+            </div>
+            <h3 class="display text-3xl font-bold text-white">Mandla Motaung</h3>
+            <p class="text-red-400 text-sm mt-2">Android Developer · AI Researcher</p>
+            <div class="mt-6 flex gap-2">
+              <span class="text-xs px-3 py-1 rounded-full bg-white/5 border border-white/10 text-white/70">Roma, Lesotho</span>
+              <span class="text-xs px-3 py-1 rounded-full bg-white/5 border border-white/10 text-white/70">BSc NUL '26</span>
+            </div>
+          </div>
+          <!-- Decorative grid -->
+          <div class="absolute inset-0 opacity-20" style="background-image:linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px); background-size:24px 24px;"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lg:col-span-7 reveal">
+      <div class="text-red-500 text-sm font-medium tracking-wider uppercase mb-2">About the Developer</div>
+      <h2 class="display text-4xl sm:text-5xl font-bold text-white">Building AI for <span class="grad-text">Sesotho speakers.</span></h2>
+      <p class="text-white/70 mt-6 leading-relaxed">
+        I'm <span class="text-white font-medium">Mandla Motaung</span>, a final-year BSc Mathematics & Computer Science student at the National University of Lesotho. My work sits at the intersection of mobile engineering, machine learning, and African language technology.
+      </p>
+      <p class="text-white/70 mt-4 leading-relaxed">
+        I've published academic research on the <span class="text-white font-medium">SeSoDa dataset</span> — a Sesotho dataset for AI research — and I'm actively developing a Sesotho Automatic Speech Recognition system to make AI inclusive for our nation.
+      </p>
+
+      <div class="mt-8 grid sm:grid-cols-2 gap-4">
+        <div class="p-5 rounded-2xl border border-white/10 bg-white/[0.02]">
+          <div class="flex items-center gap-3 mb-2">
+            <i class="fa-solid fa-graduation-cap text-red-500"></i>
+            <span class="text-white font-semibold">Education</span>
+          </div>
+          <p class="text-sm text-white/60">BSc Mathematics & Computer Science · National University of Lesotho (2022–2026)</p>
+        </div>
+        <div class="p-5 rounded-2xl border border-white/10 bg-white/[0.02]">
+          <div class="flex items-center gap-3 mb-2">
+            <i class="fa-solid fa-briefcase text-red-500"></i>
+            <span class="text-white font-semibold">Experience</span>
+          </div>
+          <p class="text-sm text-white/60">AI Data Analytics · Cyber Security · Machine Learning internships</p>
+        </div>
+        <div class="p-5 rounded-2xl border border-white/10 bg-white/[0.02]">
+          <div class="flex items-center gap-3 mb-2">
+            <i class="fa-solid fa-certificate text-red-500"></i>
+            <span class="text-white font-semibold">Certifications</span>
+          </div>
+          <p class="text-sm text-white/60">CISCO: Data Science, Cyber Security, Ethical Hacking</p>
+        </div>
+        <div class="p-5 rounded-2xl border border-white/10 bg-white/[0.02]">
+          <div class="flex items-center gap-3 mb-2">
+            <i class="fa-solid fa-flask text-red-500"></i>
+            <span class="text-white font-semibold">Research</span>
+          </div>
+          <p class="text-sm text-white/60">Published SeSoDa paper · Training & fine-tuning AI models</p>
+        </div>
+      </div>
+
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href="https://github.com/motaungmandla" target="_blank" class="btn-ghost text-white px-5 py-2.5 rounded-full inline-flex items-center gap-2 text-sm">
+          <i class="fa-brands fa-github"></i> GitHub
+        </a>
+        <a href="https://www.linkedin.com/in/mandla-motaung-82101138a" target="_blank" class="btn-ghost text-white px-5 py-2.5 rounded-full inline-flex items-center gap-2 text-sm">
+          <i class="fa-brands fa-linkedin-in"></i> LinkedIn
+        </a>
+        <a href="mailto:mandlamotaung89@gmail.com" class="btn-ghost text-white px-5 py-2.5 rounded-full inline-flex items-center gap-2 text-sm">
+          <i class="fa-solid fa-envelope"></i> Email
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills" class="py-24 md:py-32 relative border-t border-white/5">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8">
+    <div class="text-center mb-14 reveal">
+      <div class="text-red-500 text-sm font-medium tracking-wider uppercase mb-2">Tech Stack</div>
+      <h2 class="display text-4xl sm:text-5xl font-bold text-white">Tools I <span class="grad-text">build with</span></h2>
+      <p class="text-white/60 mt-4 max-w-2xl mx-auto">From native Android to machine learning pipelines — a full-stack toolkit refined through research and production apps.</p>
+    </div>
+
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 reveal">
+      <div class="chip rounded-2xl p-4 text-center">
+        <i class="fa-brands fa-android text-3xl text-red-500 mb-2"></i>
+        <div class="text-sm text-white font-medium">Android</div>
+      </div>
+      <div class="chip rounded-2xl p-4 text-center">
+        <i class="fa-brands fa-python text-3xl text-yellow-400 mb-2"></i>
+        <div class="text-sm text-white font-medium">Python</div>
+      </div>
+      <div class="chip rounded-2xl p-4 text-center">
+        <i class="fa-solid fa-brain text-3xl text-purple-500 mb-2"></i>
+        <div class="text-sm text-white font-medium">ML / AI</div>
+      </div>
+      <div class="chip rounded-2xl p-4 text-center">
+        <i class="fa-solid fa-microchip text-3xl text-emerald-500 mb-2"></i>
+        <div class="text-sm text-white font-medium">NLP</div>
+      </div>
+      <div class="chip rounded-2xl p-4 text-center">
+        <i class="fa-brands fa-git-alt text-3xl text-orange-500 mb-2"></i>
+        <div class="text-sm text-white font-medium">Git / CI</div>
+      </div>
+      <div class="chip rounded-2xl p-4 text-center">
+        <i class="fa-solid fa-shield-halved text-3xl text-sky-500 mb-2"></i>
+        <div class="text-sm text-white font-medium">CyberSec</div>
+      </div>
+      <div class="chip rounded-2xl p-4 text-center">
+        <i class="fa-brands fa-js text-3xl text-yellow-300 mb-2"></i>
+        <div class="text-sm text-white font-medium">JavaScript</div>
+      </div>
+      <div class="chip rounded-2xl p-4 text-center">
+        <i class="fa-solid fa-database text-3xl text-pink-500 mb-2"></i>
+        <div class="text-sm text-white font-medium">Data Science</div>
+      </div>
+      <div class="chip rounded-2xl p-4 text-center">
+        <i class="fa-brands fa-docker text-3xl text-blue-500 mb-2"></i>
+        <div class="text-sm text-white font-medium">Docker</div>
+      </div>
+      <div class="chip rounded-2xl p-4 text-center">
+        <i class="fa-solid fa-code text-3xl text-red-400 mb-2"></i>
+        <div class="text-sm text-white font-medium">Flutter</div>
+      </div>
+      <div class="chip rounded-2xl p-4 text-center">
+        <i class="fa-solid fa-server text-3xl text-indigo-500 mb-2"></i>
+        <div class="text-sm text-white font-medium">REST APIs</div>
+      </div>
+      <div class="chip rounded-2xl p-4 text-center">
+        <i class="fa-solid fa-language text-3xl text-teal-500 mb-2"></i>
+        <div class="text-sm text-white font-medium">Sesotho NLP</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="py-24 relative">
+  <div class="max-w-5xl mx-auto px-5 sm:px-8">
+    <div class="relative rounded-[32px] overflow-hidden border border-white/10 p-10 md:p-16 text-center reveal">
+      <div class="absolute inset-0 bg-gradient-to-br from-red-900/40 via-black to-purple-900/40"></div>
+      <div class="absolute -top-20 -left-20 w-72 h-72 bg-red-600/30 rounded-full blur-3xl"></div>
+      <div class="absolute -bottom-20 -right-20 w-72 h-72 bg-purple-600/30 rounded-full blur-3xl"></div>
+      <div class="relative">
+        <h2 class="display text-4xl md:text-5xl font-bold text-white">Ready to explore the <span class="grad-text">source code?</span></h2>
+        <p class="text-white/70 mt-4 max-w-xl mx-auto">Every app is open-source. Fork it, learn from it, or contribute. Let's build African AI together.</p>
+        <div class="mt-8 flex flex-wrap gap-3 justify-center">
+          <a href="https://github.com/motaungmandla/AndroidApps" target="_blank" class="btn-primary text-white px-6 py-3.5 rounded-full font-medium inline-flex items-center gap-2">
+            <i class="fa-brands fa-github"></i> Open Repository
+          </a>
+          <a href="https://github.com/motaungmandla/AndroidApps/actions/runs/30741243949/artifacts/8831386276" target="_blank" class="btn-ghost text-white px-6 py-3.5 rounded-full font-medium inline-flex items-center gap-2">
+            <i class="fa-solid fa-bolt"></i> Latest Artifact
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER (as provided) -->
+<footer id="contact">
+  <div class="footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4">
+          <h3>Useful links</h3>
+          <p>
+            Get in touch with us and join us on this journey as we craft state-of-the-art software tools using the power of AI and algorithms.
+          </p>
+          <a href="https://motaunginc.vercel.app">Dev Portfolio > Dev Work station</a>
+        </div>
+        <div class="col-md-4">
+          <h3>Find us</h3>
+          <ul class="social_icon">
+            <li>
+              <a href="https://x.com/motaung_ma13978" target="_blank" aria-label="Visit our X (Twitter) page">
+                <i class="fa-brands fa-x-twitter" aria-hidden="true"></i>
+              </a>
+            </li>
+            <li>
+              <a href="https://web.facebook.com/mandla.motaung.583" target="_blank" aria-label="Visit our Facebook page">
+                <i class="fa-brands fa-facebook-f" aria-hidden="true"></i>
+              </a>
+            </li>
+            <li>
+              <a href="https://www.instagram.com/maxphin21" target="_blank" aria-label="Visit our Instagram page">
+                <i class="fa-brands fa-instagram" aria-hidden="true"></i>
+              </a>
+            </li>
+            <li>
+              <a href="https://www.linkedin.com/in/mandla-motaung-82101138a" target="_blank" aria-label="Visit our LinkedIn page">
+                <i class="fa-brands fa-linkedin-in" aria-hidden="true"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="copyright">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <p>© 2024 All Rights Reserved. Designed by <a href="https://motaunginc.vercel.app">Motaung inc</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Mobile menu
+  const menuBtn = document.getElementById('menuBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('open'));
+  mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileMenu.classList.remove('open')));
+
+  // Navbar blur on scroll
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 20) {
+      navbar.classList.add('bg-black/60');
+    } else {
+      navbar.classList.remove('bg-black/60');
+    }
+  });
+
+  // Reveal on scroll
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((entry, idx) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('in'), idx * 60);
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => io.observe(el));
+
+  // Counter animation
+  const counters = document.querySelectorAll('.counter');
+  const counterIO = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        const target = +el.dataset.target;
+        const duration = 1400;
+        const start = performance.now();
+        const tick = (now) => {
+          const p = Math.min(1, (now - start) / duration);
+          const eased = 1 - Math.pow(1 - p, 3);
+          el.textContent = Math.floor(eased * target).toLocaleString();
+          if (p < 1) requestAnimationFrame(tick);
+          else el.textContent = target.toLocaleString();
+        };
+        requestAnimationFrame(tick);
+        counterIO.unobserve(el);
+      }
+    });
+  }, { threshold: 0.5 });
+  counters.forEach(c => counterIO.observe(c));
+
+  // Card spotlight effect
+  document.querySelectorAll('.app-card').forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const r = card.getBoundingClientRect();
+      const x = ((e.clientX - r.left) / r.width) * 100;
+      const y = ((e.clientY - r.top) / r.height) * 100;
+      card.style.setProperty('--mx', x + '%');
+      card.style.setProperty('--my', y + '%');
+    });
+  });
+
+  // Smooth scroll for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', (e) => {
+      const id = a.getAttribute('href');
+      if (id.length > 1) {
+        const target = document.querySelector(id);
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }
+    });
+  });
+</script>
+</body>
+</html>
